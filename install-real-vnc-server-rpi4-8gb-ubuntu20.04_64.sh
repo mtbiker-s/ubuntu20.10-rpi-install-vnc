@@ -19,14 +19,14 @@ echo
 
 echo "Would you like to continue?"
 echo "Enter 'y' for yes or 'n' for No :"
-read answer
+read -r answer
 
 if [[ $answer == 'y' || $answer == 'Y' ]]; then
 
 
     # Download package required
     echo
-    echo "Installing VNC Server : "$vncServer"..."
+    echo "Installing VNC Server : \"$vncServer\"..."
     wget https://archive.raspberrypi.org/debian/pool/main/r/realvnc-vnc/$vncServer
 
     # Install package
@@ -34,7 +34,7 @@ if [[ $answer == 'y' || $answer == 'Y' ]]; then
 
     # Change over to the aarch64-linux-gnu folder under /usr/lib
     # Source file location of libs needed
-    cd /usr/lib/aarch64-linux-gnu
+    cd "/usr/lib/aarch64-linux-gnu" || exit
 
 
     # Array of the files that are needed to create the lib symlinks
@@ -53,8 +53,8 @@ if [[ $answer == 'y' || $answer == 'Y' ]]; then
       # Note it will create the symlink file with .0 appended under the /usr/lib folder
       sourceFile="/usr/lib/aarch64-linux-gnu/"$fileName
       symlinkFile="/usr/lib/$fileName.0"
-      echo "attempting to create symlink file "$symlinkFile"..."
-      sudo ln -s $sourceFile $symlinkFile
+      echo "attempting to create symlink file \"$symlinkFile\"..."
+      sudo ln -s "$sourceFile" "$symlinkFile"
     done
 
     declare -a servicesNeeded=( "vncserver-virtuald.service" "vncserver-x11-serviced.service")
@@ -64,19 +64,19 @@ if [[ $answer == 'y' || $answer == 'Y' ]]; then
     echo "Enabling and starting the necessary services..."
     for serviceName in "${servicesNeeded[@]}"
     do
-        echo "Enabling and starting the service "$serviceName"..."
-        sudo systemctl enable $serviceName
-        sudo systemctl start $serviceName
+        echo "Enabling and starting the service \"$serviceName\"..."
+        sudo systemctl enable "$serviceName"
+        sudo systemctl start "$serviceName"
     done
 
     echo
-    echo "RealVNC Server : "$vncServer" has been installed."
+    echo "RealVNC Server : \"$vncServer\" has been installed."
 
     echo
     echo "The system needs to be rebooted."
     echo "Would you like to reboot it now?"
     echo "Enter 'y' for yes or 'n' for No :"
-    read rebootAnswer
+    read -r rebootAnswer
 
 
     if [[ $rebootAnswer == 'y' || $rebootAnswer == 'Y' ]]; then
