@@ -33,7 +33,7 @@ function modifyGDM3CustomConf(){
     gdm3File="/etc/gdm3/custom.conf"
     echo "Attempting to make a backup of $gdm3File..."
     timeStamp=$(date '+%Y%m%d-%H%M%S')
-    sudo cp -rfv "$gdm3File $gdm3File.$timeStamp" 
+    sudo cp -rfv "$gdm3File" "$gdm3File.$timeStamp" 
 
     ls -lahtr /etc/gdm3
     
