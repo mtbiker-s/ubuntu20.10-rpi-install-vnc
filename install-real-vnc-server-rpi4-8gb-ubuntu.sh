@@ -11,6 +11,8 @@
 vncServer="realvnc-vnc-server_6.7.2.43081_arm64.deb"
 
 releaseInfo=`lsb_release -a`
+releaseVersion=`lsb_release -r`
+echo $releaseVersion
 
 
 
@@ -51,7 +53,7 @@ function main(){
 
     for version in "${lookForVersions[@]}"
     do
-        if [[ "$releaseInfo" == *"$version"* ]]; then
+        if [[ "$releaseVersion" == *"$version"* ]]; then
             echo "$releaseInfo"
             echo "is supported by this script."
         else
