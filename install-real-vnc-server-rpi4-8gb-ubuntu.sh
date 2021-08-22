@@ -44,7 +44,7 @@ function modifyGDM3CustomConf(){
     echo
     echo "Attempting to modify $gdm3File"
     echo "Un-commenting WaylandEnable=false in file."
-    sudo sed 's/#WaylandEnable=false/WaylandEnabled=false/g' $gdm3File
+    sudo sed -i 's/#WaylandEnable=false/WaylandEnabled=false/g' $gdm3File
     echo
     echo
 
