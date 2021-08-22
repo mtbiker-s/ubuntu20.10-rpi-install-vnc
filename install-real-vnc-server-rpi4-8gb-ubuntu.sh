@@ -31,13 +31,22 @@ function modifyGDM3CustomConf(){
     # Make backup of custom.conf under /etc/gdm3
     # replace the #WaylandEnabled=false with out it being commented out
     gdm3File="/etc/gdm3/custom.conf"
+    echo
+    echo
     echo "Attempting to make a backup of $gdm3File..."
     timeStamp=$(date '+%Y%m%d-%H%M%S')
-    sudo cp -rfv "$gdm3File" "$gdm3File.$timeStamp" 
+    sudo cp -rfv "$gdm3File" "$gdm3File.bkup.$timeStamp" 
 
     ls -lahtr /etc/gdm3
     
-    # TODO use sed to modify custom.conf
+    # Using sed to modify custom.conf under /etc/gdm3
+    echo
+    echo
+    echo "Attempting to modify $gdm3File"
+    echo "Un-commenting WaylandEnable=false in file."
+    sudo sed 's/#WaylandEnable=false/WaylandEnabled=false/g' $gdm3File
+    echo
+    echo
 
 }
 
