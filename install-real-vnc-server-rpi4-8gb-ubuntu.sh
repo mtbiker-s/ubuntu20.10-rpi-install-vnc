@@ -27,16 +27,17 @@ declare -a lookForVersions=( "20.10" "21.04" )
 # custom.conf file. It makes a backup of the custom.conf
 # file first.
 function modifyGDM3CustomConf(){
-    # TODO
-    # Check to see if the version is Hirsute Hippo 21.04
+    
     # Make backup of custom.conf under /etc/gdm3
     # replace the #WaylandEnabled=false with out it being commented out
     gdm3File="/etc/gdm3/custom.conf"
     echo "Attempting to make a backup of $gdm3File..."
     timeStamp=$(date '+%Y%m%d-%H%M%S')
     sudo cp -rfv "$gdm3File $gdm3File.$timeStamp" 
-    #echo $timeStamp
-    echo "test"
+
+    ls -lahtr /etc/gdm3
+    
+    # TODO use sed to modify custom.conf
 
 }
 
@@ -54,14 +55,12 @@ function main(){
     do
         if [[ "$releaseVersion" == *"$version"* ]]; then
             isSupportedVersion=1
-            echo $version
         else
             isSupportedVersion=0
-            echo $version
         fi
     done
 
-    echo "what"$isSupportedVersion
+
     if [[ $isSupportedVersion == 1 ]]; then
         echo "$releaseInfo"
         echo "is supported by this script."
@@ -78,7 +77,6 @@ function main(){
 
     if [[ $answer == 'y' || $answer == 'Y' ]]; then
 
-        exit
         # Download package required
         echo
         echo "Installing VNC Server : \"$vncServer\"..."
@@ -124,18 +122,16 @@ function main(){
             sudo systemctl start "$serviceName"
         done
 
-        # TODO 
-        # Check the $releaseInfo if its in the versions that need it like 
-        # Hirsute Hippo v21.04 then call the function
-        # modifyGDM3CustomConf
-        for version in "${lookForVersions[@]}"
-        do
-            if [[ "$version" != "20.10" ]]; then
+        
+        # Running this only if the version of Ubuntu
+        # for RPi is not Hirsute Hippo 20.10
+        if [[ "$releasVersion" != *"20.10"* ]]; then
                 # Call function to do the modification of
                 # the /etc/gdm3/custom.conf file
                 modifyGDM3CustomConf
-            fi
-        done
+        fi
+
+       
 
         echo
         echo "RealVNC Server : \"$vncServer\" has been installed."
