@@ -1,3 +1,4 @@
 # ignoring the following files and dirs
 
 **/.idea
+**/.access_token
