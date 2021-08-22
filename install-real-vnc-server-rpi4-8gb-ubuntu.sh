@@ -12,8 +12,6 @@ vncServer="realvnc-vnc-server_6.7.2.43081_arm64.deb"
 
 releaseInfo=`lsb_release -a`
 releaseVersion=`lsb_release -r`
-echo $releaseVersion
-
 
 
 # Array of Ubuntu versions that need to have the
@@ -51,18 +49,27 @@ function main(){
     echo
     echo "Checking to see if this version of Ubuntu for RaspberryPi is supported by script..."
 
+    
     for version in "${lookForVersions[@]}"
     do
         if [[ "$releaseVersion" == *"$version"* ]]; then
-            echo "$releaseInfo"
-            echo "is supported by this script."
+            isSupportedVersion=1
+            echo $version
         else
-            echo "$releaseInfo"
-            echo "Is not supported, exiting program..."
-            exit
-
+            isSupportedVersion=0
+            echo $version
         fi
     done
+
+    echo "what"$isSupportedVersion
+    if [[ $isSupportedVersion == 1 ]]; then
+        echo "$releaseInfo"
+        echo "is supported by this script."
+    else
+        echo "$releaseInfo"
+        echo "Is not supported, exiting program..."
+        exit
+    fi
 
 
     echo "Would you like to continue?"
