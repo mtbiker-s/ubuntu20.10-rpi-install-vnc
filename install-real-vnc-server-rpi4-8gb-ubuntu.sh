@@ -99,6 +99,13 @@ function main(){
         cd "/usr/lib/aarch64-linux-gnu" || exit
 
 
+        # Add missing lib, could occur from during running after a clean install 
+        # of RasPI Ubuntu
+        # Bug repored by https://github.com/codefun
+        # https://github.com/mtbiker-s/ubuntu20.10-rpi-install-vnc/issues/4
+        sudo apt install libraspberrypi0
+
+
         # Array of the files that are needed to create the lib symlinks
         declare -a libFilesToSymLink=( "libvchiq_arm.so" "libbcm_host.so" "libvcos.so" "libmmal.so" "libmmal_core.so" "libmmal_components.so"
         "libmmal_util.so" "libmmal_vc_client.so" "libvcsm.so" "libcontainers.so" )
