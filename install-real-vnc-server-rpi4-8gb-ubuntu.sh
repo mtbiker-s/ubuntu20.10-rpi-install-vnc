@@ -86,26 +86,19 @@ function main(){
 
     if [[ $answer == 'y' || $answer == 'Y' ]]; then
 
-        # Download package required
-        echo
-        echo "Installing VNC Server : \"$vncServer\"..."
-        wget https://archive.raspberrypi.org/debian/pool/main/r/realvnc-vnc/$vncServer
-
-        # Install package
-        sudo dpkg -i $vncServer
-
-        # Change over to the aarch64-linux-gnu folder under /usr/lib
-        # Source file location of libs needed
-        cd "/usr/lib/aarch64-linux-gnu" || exit
-
-
-        # Add missing lib, could occur from during running after a clean install 
-        # of RasPI Ubuntu
+        # Start by installing all libraries VNC server will depend on
+		echo
+        echo "Installing VNC Server dependencies..."
+		
+        # Add RaspPi missing lib, could occur when using clean Ubuntu RaspPI image 
         # Bug repored by https://github.com/codefun
         # https://github.com/mtbiker-s/ubuntu20.10-rpi-install-vnc/issues/4
         sudo apt install libraspberrypi0
 
-
+		# Change over to the aarch64-linux-gnu folder under /usr/lib
+        # Source file location of libs needed
+        cd "/usr/lib/aarch64-linux-gnu" || exit
+		
         # Array of the files that are needed to create the lib symlinks
         declare -a libFilesToSymLink=( "libvchiq_arm.so" "libbcm_host.so" "libvcos.so" "libmmal.so" "libmmal_core.so" "libmmal_components.so"
         "libmmal_util.so" "libmmal_vc_client.so" "libvcsm.so" "libcontainers.so" )
@@ -126,6 +119,15 @@ function main(){
         sudo ln -s "$sourceFile" "$symlinkFile"
         done
 
+		# Download VNC server package and get ready to install it
+        echo
+        echo "Installing VNC Server : \"$vncServer\"..."
+        wget https://archive.raspberrypi.org/debian/pool/main/r/realvnc-vnc/$vncServer
+
+        # Install package
+        sudo dpkg -i $vncServer
+
+		# VNC services that will make use of the lib files previously installed
         declare -a servicesNeeded=( "vncserver-virtuald.service" "vncserver-x11-serviced.service")
 
         # enable the services for vncserver
